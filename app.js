@@ -82,8 +82,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             btn.innerHTML = `
                 <div class="card-inner">
-                    <span class="card-front" aria-hidden="true">❓</span>
-                    <span class="card-back">${item.icon}</span>
+                    <span class="card-front" aria-hidden="true">?</span>
+                    <span class="card-back" aria-hidden="true">${item.icon}</span>
                 </div>
             `;
 
