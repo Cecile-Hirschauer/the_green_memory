@@ -45,6 +45,22 @@ body {
   border-radius: 4px;
 }
 
+/* Skip Link (Accessibilité) */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--color-primary);
+  color: white;
+  padding: 0.5rem 1rem;
+  z-index: 100;
+  transition: top 0.3s;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
 /* Layout Principal */
 main {
   width: var(--container-width);
@@ -75,6 +91,8 @@ h1 {
   padding: var(--spacing-sm) var(--spacing-md);
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  width: var(--container-width);
+  margin-bottom: var(--spacing-md);
 }
 
 /* Bouton Reset */
@@ -106,14 +124,20 @@ h1 {
 /* GRILLE DU JEU (Container) */
 .game-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); 
+  grid-template-columns: repeat(4, 1fr);
   gap: var(--spacing-sm);
+  width: 100%;
   max-width: 500px;
   margin: 0 auto;
-  
+
   /* Reset de liste */
   list-style: none;
   padding: 0;
+}
+
+/* Cellule de la grille (li) */
+.game-grid li {
+  aspect-ratio: 1 / 1;
 }
 
 /* LA CARTE (<button>) */
@@ -216,4 +240,12 @@ h1 {
   0% { transform: rotateY(180deg) scale(1); }
   50% { transform: rotateY(180deg) scale(1.1); }
   100% { transform: rotateY(180deg) scale(1); }
+}
+
+/* Footer */
+footer {
+  margin-top: var(--spacing-md);
+  text-align: center;
+  color: var(--color-text);
+  font-size: var(--text-base);
 }
