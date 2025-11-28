@@ -34,8 +34,9 @@ body {
   line-height: 1.5;
   display: flex;
   flex-direction: column;
-  min-height: 100dvh; 
+  min-height: 100dvh;
   align-items: center;
+  justify-content: space-between;
   padding: var(--spacing-md);
 }
 
@@ -64,9 +65,12 @@ body {
 /* Layout Principal */
 main {
   width: var(--container-width);
-  margin: auto;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
   gap: var(--spacing-md);
 }
 
@@ -111,16 +115,6 @@ h1 {
   background: var(--color-primary-hover);
 }
 
-/* Grille du Jeu 
-*/
-.game-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); 
-  gap: var(--spacing-sm);
-  list-style: none; /* Si on utilise <ul> */
-  padding: 0;
-}
-
 /* GRILLE DU JEU (Container) */
 .game-grid {
   display: grid;
@@ -129,10 +123,9 @@ h1 {
   width: 100%;
   max-width: 500px;
   margin: 0 auto;
-
-  /* Reset de liste */
-  list-style: none;
   padding: 0;
+  list-style: none;
+  justify-content: center;
 }
 
 /* Cellule de la grille (li) */
@@ -251,6 +244,8 @@ h1 {
   text-align: center;
   font-size: var(--text-xl);
   margin-bottom: var(--spacing-md);
+  width: 100%;
+  max-width: 500px;
   animation: fadeIn 0.3s ease-in-out;
 }
 
@@ -273,8 +268,10 @@ h1 {
 
 /* Footer */
 footer {
-  margin-top: var(--spacing-md);
+  margin-top: auto;
+  padding-top: var(--spacing-md);
   text-align: center;
   color: var(--color-text);
   font-size: var(--text-base);
+  flex-shrink: 0;
 }
