@@ -246,6 +246,7 @@ h1 {
   margin-bottom: var(--spacing-md);
   width: 100%;
   max-width: 500px;
+
   animation: fadeIn 0.3s ease-in-out;
 }
 
