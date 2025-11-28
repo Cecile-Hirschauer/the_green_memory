@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Green Memory - Jeu de mémoire éco-responsable</title>
+    <meta name="description"
+        content="Un jeu de mémoire accessible et léger pour sensibiliser à la biodiversité. Trouvez les paires d'animaux et de plantes.">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <a href="#game-board" class="skip-link">Passer directement au jeu</a>
+
+    <header>
+        <h1>Green Memory 🌿</h1>
+        <p>Exercez votre mémoire en découvrant la biodiversité.</p>
+    </header>
+
+    <section class="game-controls" aria-label="Statut du jeu">
+        <div class="score-board">
+            <span id="moves" aria-label="Nombre de coups joués">0 coups</span>
+        </div>
+
+        <button type="button" id="restart-btn" class="btn-reset">
+            Recommencer
+        </button>
+    </section>
+
+    <div id="live-feedback" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+    <main>
+        <ul id="game-board" class="game-grid" aria-label="Plateau de jeu">
+        </ul>
+    </main>
+
+    <footer>
+        <p>
+            Créé avec sobriété et amour.
+            <span aria-hidden="true">🌱</span>
+        </p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
