@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const moveCounter = document.getElementById('moves');
     const liveRegion = document.getElementById('live-feedback');
     const restartBtn = document.getElementById('restart-btn');
+    const gameMessage = document.getElementById('game-message');
 
     // ÉTAT DU JEU
     let cards = [];
@@ -43,9 +44,23 @@ document.addEventListener('DOMContentLoaded', () => {
         return array;
     };
 
-    // Annonce vocale pour lecteur d'écran  
+    // Annonce vocale pour lecteur d'écran
     const announce = (message) => {
         liveRegion.textContent = message;
+    };
+
+    // Affiche un message visible à l'écran
+    const showMessage = (message, type = '') => {
+        gameMessage.textContent = message;
+        gameMessage.className = 'game-message' + (type ? ` ${type}` : '');
+        gameMessage.hidden = false;
+    };
+
+    // Cache le message
+    const hideMessage = () => {
+        gameMessage.hidden = true;
+        gameMessage.textContent = '';
+        gameMessage.className = 'game-message';
     };
 
     // Mise à jour du compteur visuel et accessible
@@ -65,6 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
         isLocked = false;
         moveCounter.textContent = '0 coups';
         grid.innerHTML = '';
+        hideMessage();
         announce("Nouvelle partie commencée. À vous de jouer !");
 
         cards = shuffle([...items, ...items]);
@@ -142,7 +158,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (matchedPairs === items.length) { // 8 paires
             setTimeout(() => {
-                announce(`Bravo ! Vous avez gagné en ${moves} coups. Cliquez sur Recommencer pour rejouer.`); // [cite: 33]
+                const winMessage = `Bravo ! Vous avez gagné en ${moves} coups !`;
+                showMessage(winMessage, 'win');
+                announce(`${winMessage} Cliquez sur Recommencer pour rejouer.`);
                 restartBtn.focus();
             }, 500);
         }
