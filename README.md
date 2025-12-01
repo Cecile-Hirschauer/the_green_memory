@@ -62,6 +62,3 @@ npx serve
 - CSS3 (Grid, Flexbox, Custom Properties, animations)
 - JavaScript ES6+ (Vanilla)
 
-## Licence
-
-Créé avec sobriété et amour.
