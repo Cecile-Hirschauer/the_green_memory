@@ -82,8 +82,19 @@ document.addEventListener('DOMContentLoaded', () => {
         // Alerte quand il reste peu de coups
         if (remaining === 5) {
             announce(`Attention, il ne vous reste que 5 coups !`);
-        } else if (remaining === 2) {
-            announce(`Plus que 2 coups !`);
+        } else if (remaining === 3) {
+            announce(`Attention, plus que 3 coups !`);
+        } else if (remaining === 1) {
+            announce(`Dernier coup !`);
+        }
+    };
+
+    // Annonce de la progression
+    const announceProgress = () => {
+        const pairsRemaining = items.length - matchedPairs;
+        if (pairsRemaining > 0) {
+            const remaining = MAX_MOVES - moves;
+            announce(`${matchedPairs} paire${matchedPairs > 1 ? 's' : ''} trouvée${matchedPairs > 1 ? 's' : ''} sur ${items.length}. Il vous reste ${remaining} coup${remaining > 1 ? 's' : ''}.`);
         }
     };
 
@@ -195,6 +206,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 showFeedback(`Bravo, vous avez gagné en ${moves} coups !`, 'win');
                 restartBtn.focus();
             }, 500);
+        } else {
+            // Annonce de la progression après un court délai
+            setTimeout(() => {
+                announceProgress();
+            }, 1500);
         }
     };
 
