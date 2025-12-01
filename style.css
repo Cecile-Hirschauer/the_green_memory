@@ -272,6 +272,7 @@ h1 {
 
 /* Footer */
 footer {
+  bottom: 5vh;
   margin-top: auto;
   padding-top: var(--spacing-sm);
   padding-bottom: var(--spacing-md);
@@ -279,4 +280,10 @@ footer {
   color: var(--color-text);
   font-size: var(--text-base);
   flex-shrink: 0;
+}
+
+.page-weight {
+  font-size: 0.85rem;
+  opacity: 0.8;
+  margin-top: var(--spacing-sm);
 }

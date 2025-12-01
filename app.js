@@ -225,4 +225,18 @@ document.addEventListener('DOMContentLoaded', () => {
     restartBtn.addEventListener('click', initGame);
 
     initGame();
+
+    // Calcul du poids de la page
+    window.addEventListener('load', () => {
+        if (window.performance) {
+            const resources = performance.getEntriesByType('resource');
+            const transferSize = resources.reduce((acc, r) => acc + (r.transferSize || 0), 0);
+            const docSize = new Blob([document.documentElement.outerHTML]).size;
+            const totalSize = transferSize + docSize;
+            const pageWeight = document.getElementById('page-weight');
+            if (pageWeight && totalSize > 0) {
+                pageWeight.textContent = (totalSize / 1024).toFixed(1) + ' Ko';
+            }
+        }
+    });
 });
