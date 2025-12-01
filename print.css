@@ -1,0 +1,106 @@
+/**
+ * Print CSS - Green Memory
+ * Optimise l'impression : économie d'encre, lisibilité, sobriété
+ */
+
+@media print {
+  /* Reset des couleurs pour économiser l'encre */
+  * {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  /* Police économe en encre */
+  body {
+    font-family: "Century Gothic", "Avant Garde", sans-serif;
+    font-size: 12pt;
+    line-height: 1.4;
+    margin: 0;
+    padding: 1cm;
+  }
+
+  /* Masquer les éléments non essentiels */
+  .skip-link,
+  .game-controls,
+  .btn-reset,
+  #live-feedback,
+  .game-message,
+  footer {
+    display: none !important;
+  }
+
+  /* En-tête simplifié */
+  header {
+    text-align: center;
+    margin-bottom: 1cm;
+    border-bottom: 1px solid #000;
+    padding-bottom: 0.5cm;
+  }
+
+  h1 {
+    font-size: 18pt;
+    margin: 0;
+  }
+
+  header p {
+    font-size: 10pt;
+    margin-top: 0.25cm;
+  }
+
+  /* Grille de jeu pour impression */
+  .game-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5cm;
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    max-width: 16cm;
+  }
+
+  .game-grid li {
+    break-inside: avoid;
+  }
+
+  /* Cartes en mode impression */
+  .card {
+    border: 2px solid #000;
+    border-radius: 4px;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24pt;
+  }
+
+  .card-inner {
+    transform: none !important;
+  }
+
+  /* Afficher uniquement la face avant (?) pour impression */
+  .card-front {
+    position: static !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
+
+  .card-back {
+    display: none !important;
+  }
+
+  /* Pas de coupure de page au milieu du jeu */
+  main {
+    break-inside: avoid;
+  }
+
+  /* URLs visibles pour les liens (si ajoutés ultérieurement) */
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+  }
+}

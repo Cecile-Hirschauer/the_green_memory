@@ -24,12 +24,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const restartBtn = document.getElementById('restart-btn');
     const gameMessage = document.getElementById('game-message');
 
+    // CONFIGURATION
+    const MAX_MOVES = 12; // Limite de coups
+
     // ÉTAT DU JEU
     let cards = [];
-    let flippedCards = []; 
+    let flippedCards = [];
     let matchedPairs = 0;
     let moves = 0;
-    let isLocked = false; 
+    let isLocked = false;
+    let isGameOver = false; 
 
     // ---------------------------------------------------------
     // FONCTIONS UTILITAIRES
@@ -44,19 +48,25 @@ document.addEventListener('DOMContentLoaded', () => {
         return array;
     };
 
-    // Annonce vocale pour lecteur d'écran
+    // Annonce vocale pour lecteur d'écran (aria-live)
     const announce = (message) => {
         liveRegion.textContent = message;
     };
 
-    // Affiche un message visible à l'écran
-    const showMessage = (message, type = '') => {
-        gameMessage.textContent = message;
-        gameMessage.className = 'game-message' + (type ? ` ${type}` : '');
-        gameMessage.hidden = false;
+    // Affiche un message visible ET vocal
+    const showFeedback = (message, type = '', isVisual = true) => {
+        // Toujours annoncer vocalement
+        announce(message);
+
+        // Afficher visuellement si demandé
+        if (isVisual) {
+            gameMessage.textContent = message;
+            gameMessage.className = 'game-message' + (type ? ` ${type}` : '');
+            gameMessage.hidden = false;
+        }
     };
 
-    // Cache le message
+    // Cache le message visuel
     const hideMessage = () => {
         gameMessage.hidden = true;
         gameMessage.textContent = '';
@@ -66,7 +76,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Mise à jour du compteur visuel et accessible
     const updateMoves = () => {
         moves++;
-        moveCounter.textContent = `${moves} coups`;
+        const remaining = MAX_MOVES - moves;
+        moveCounter.textContent = `${moves}/${MAX_MOVES} coups`;
+
+        // Alerte quand il reste peu de coups
+        if (remaining === 5) {
+            announce(`Attention, il ne vous reste que 5 coups !`);
+        } else if (remaining === 2) {
+            announce(`Plus que 2 coups !`);
+        }
     };
 
     // ---------------------------------------------------------
@@ -78,7 +96,8 @@ document.addEventListener('DOMContentLoaded', () => {
         matchedPairs = 0;
         flippedCards = [];
         isLocked = false;
-        moveCounter.textContent = '0 coups';
+        isGameOver = false;
+        moveCounter.textContent = `0/${MAX_MOVES} coups`;
         grid.innerHTML = '';
         hideMessage();
         announce("Nouvelle partie commencée. À vous de jouer !");
@@ -113,8 +132,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // LOGIQUE DU TOUR
 
     const handleCardClick = (btn, item) => {
-        // Bloque si : jeu verrouillé, carte déjà retournée, ou carte déjà trouvée
-        if (isLocked || btn.classList.contains('flipped') || btn.classList.contains('matched')) {
+        // Bloque si : jeu terminé, jeu verrouillé, carte déjà retournée, ou carte déjà trouvée
+        if (isGameOver || isLocked || btn.classList.contains('flipped') || btn.classList.contains('matched')) {
             return;
         }
 
@@ -131,12 +150,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const flipCard = (btn, item) => {
         btn.classList.add('flipped');
         // Mise à jour ARIA immédiate : "Carte 1, Renard" 
-        btn.setAttribute('aria-label', `Carte ${parseInt(btn.dataset.index) + 1}, ${item.name}`);
+        btn.setAttribute('aria-label', `Carte ${parseInt(btn.dataset.index, 10) + 1}, ${item.name}`);
         flippedCards.push({ element: btn, name: item.name });
     };
 
     const checkForMatch = () => {
-        isLocked = true; 
+        isLocked = true;
         const [card1, card2] = flippedCards;
 
         // Comparaison
@@ -145,22 +164,35 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             handleMismatch(card1, card2);
         }
+
+        // Vérifier si limite de coups atteinte (et pas encore gagné)
+        if (moves >= MAX_MOVES && matchedPairs < items.length) {
+            handleGameOver();
+        }
+    };
+
+    // Cas : DÉFAITE (limite de coups atteinte)
+    const handleGameOver = () => {
+        isGameOver = true;
+        setTimeout(() => {
+            showFeedback(`Dommage ! Vous avez utilisé vos ${MAX_MOVES} coups.`, 'lose');
+            restartBtn.focus();
+        }, 1200);
     };
 
     // Cas : PAIRE TROUVÉE
     const handleMatch = (card1, card2) => {
         card1.element.classList.add('matched');
         card2.element.classList.add('matched');
-        
+
         matchedPairs++;
-        announce(`Paire trouvée ! ${card1.name}.`); 
+        showFeedback(`Paire trouvée !`, 'win');
         resetTurn();
 
         if (matchedPairs === items.length) { // 8 paires
+            isGameOver = true;
             setTimeout(() => {
-                const winMessage = `Bravo ! Vous avez gagné en ${moves} coups !`;
-                showMessage(winMessage, 'win');
-                announce(`${winMessage} Cliquez sur Recommencer pour rejouer.`);
+                showFeedback(`Bravo, vous avez gagné en ${moves} coups !`, 'win');
                 restartBtn.focus();
             }, 500);
         }
@@ -168,17 +200,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Cas : PAS DE CORRESPONDANCE
     const handleMismatch = (card1, card2) => {
-        announce(`Pas de correspondance. ${card1.name} et ${card2.name}.`); 
-        
+        showFeedback(`Pas de correspondance, essayez encore.`, 'lose');
+
         setTimeout(() => {
             card1.element.classList.remove('flipped');
             card2.element.classList.remove('flipped');
-            
-            card1.element.setAttribute('aria-label', `Carte ${parseInt(card1.element.dataset.index) + 1}, masquée`);
-            card2.element.setAttribute('aria-label', `Carte ${parseInt(card2.element.dataset.index) + 1}, masquée`);
-            
+
+            card1.element.setAttribute('aria-label', `Carte ${parseInt(card1.element.dataset.index, 10) + 1}, masquée`);
+            card2.element.setAttribute('aria-label', `Carte ${parseInt(card2.element.dataset.index, 10) + 1}, masquée`);
+
+            hideMessage();
             resetTurn();
-        }, 1000); 
+        }, 1000);
     };
 
     const resetTurn = () => {

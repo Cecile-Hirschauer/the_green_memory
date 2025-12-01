@@ -235,19 +235,22 @@ h1 {
   100% { transform: rotateY(180deg) scale(1); }
 }
 
-/* Message de jeu (victoire/défaite) */
+/* Message de jeu (victoire/défaite) - Overlay discret */
 .game-message {
+  position: fixed;
+  bottom: var(--spacing-md);
+  left: 50%;
+  transform: translateX(-50%);
   background: var(--color-primary);
   color: white;
-  padding: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
   border-radius: 8px;
   text-align: center;
-  font-size: var(--text-xl);
-  margin-bottom: var(--spacing-md);
-  width: 100%;
-  max-width: 500px;
-
-  animation: fadeIn 0.3s ease-in-out;
+  font-size: var(--text-base);
+  max-width: calc(100% - 2rem);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+  animation: slideUp 0.3s ease-out;
 }
 
 .game-message[hidden] {
@@ -262,15 +265,16 @@ h1 {
   background: var(--color-focus);
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+@keyframes slideUp {
+  from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
 /* Footer */
 footer {
   margin-top: auto;
-  padding-top: var(--spacing-md);
+  padding-top: var(--spacing-sm);
+  padding-bottom: var(--spacing-md);
   text-align: center;
   color: var(--color-text);
   font-size: var(--text-base);
