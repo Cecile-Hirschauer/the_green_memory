@@ -35,7 +35,12 @@
     <main>
         <div id="game-message" class="game-message" role="status" aria-live="polite" hidden></div>
 
-        <ul id="game-board" class="game-grid" aria-label="Plateau de jeu">
+        <p class="sr-only">
+            Trouvez les 8 paires en moins de 12 coups.
+            Utilisez Tab pour naviguer entre les cartes et Entrée ou Espace pour retourner une carte.
+        </p>
+
+        <ul id="game-board" class="game-grid" aria-label="Plateau de jeu, 16 cartes">
             <!-- Cartes générées dynamiquement par app.js -->
         </ul>
     </main>
@@ -48,7 +53,7 @@
         <p class="page-weight">Poids de la page : <span id="page-weight">~15 Ko</span></p>
     </footer>
 
-    <script src="app.min.js"></script>
+    <script src="app.min.js" defer></script>
 </body>
 
 </html>

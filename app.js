@@ -115,15 +115,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         cards = shuffle([...items, ...items]);
 
+        const fragment = document.createDocumentFragment();
+
         cards.forEach((item, index) => {
             const li = document.createElement('li');
-            
+
             const btn = document.createElement('button');
             btn.type = 'button';
             btn.classList.add('card');
-            btn.dataset.name = item.name; 
+            btn.dataset.name = item.name;
             btn.dataset.index = index;
-            
+
             btn.setAttribute('aria-label', `Carte ${index + 1}, masquée`);
 
             btn.innerHTML = `
@@ -136,8 +138,10 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.addEventListener('click', () => handleCardClick(btn, item));
 
             li.appendChild(btn);
-            grid.appendChild(li);
+            fragment.appendChild(li);
         });
+
+        grid.appendChild(fragment);
     };
 
     // LOGIQUE DU TOUR
@@ -185,6 +189,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Cas : DÉFAITE (limite de coups atteinte)
     const handleGameOver = () => {
         isGameOver = true;
+
+        // Désactiver les cartes non trouvées pour les technologies d'assistance
+        document.querySelectorAll('.card:not(.matched)').forEach(card => {
+            card.setAttribute('aria-disabled', 'true');
+        });
+
         setTimeout(() => {
             showFeedback(`Dommage ! Vous avez utilisé vos ${MAX_MOVES} coups.`, 'lose');
             restartBtn.focus();
@@ -202,6 +212,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (matchedPairs === items.length) { // 8 paires
             isGameOver = true;
+
+            // Toutes les cartes sont trouvées, marquer comme terminé
+            document.querySelectorAll('.card').forEach(card => {
+                card.setAttribute('aria-disabled', 'true');
+            });
+
             setTimeout(() => {
                 showFeedback(`Bravo, vous avez gagné en ${moves} coups !`, 'win');
                 restartBtn.focus();
@@ -227,6 +243,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             hideMessage();
             resetTurn();
+
+            // Repositionner le focus pour les utilisateurs clavier
+            card1.element.focus();
         }, 1000);
     };
 
